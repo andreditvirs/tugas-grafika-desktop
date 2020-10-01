@@ -1,153 +1,194 @@
 #include <GL/glut.h>
-#include <math.h>
 #include <iostream>
-#include <stdio.h>
-#include <stdlib.h>
+#include <GL/freeglut.h>
+using namespace std;
 
-// Struct untuk menyimpan koordinat titik (x,y)
+float angle[5] = { 0.0, 0.0, 0.0, 0.0, 0.0 };
+
 typedef struct {
 	float x;
 	float y;
-} point2D_t;
+} Point2D_t;
 
-// Struct untuk membuat warna rgb
 typedef struct {
 	float r;
 	float g;
 	float b;
-}color_t;
+} Color_t;
 
-// Fungsi untuk set warna
-void setColor(color_t col) {
+void setColor(Color_t col)
+{
 	glColor3f(col.r, col.g, col.b);
 }
 
-// Fungsi untuk menggambar garis
-void drawLine(point2D_t pnt[], int n, color_t color) {
+void drawLine(Point2D_t pnt[], int n, Color_t color)
+{
 	int i;
 	setColor(color);
 	glBegin(GL_LINES);
-	for (i = 0; i < n; i++) {
-		glVertex2f(pnt[i].x, pnt[i].y);
-	}glEnd();
-}
-
-// Fungsi untuk menggambar polygon (kurva tertutup)
-void drawPolygon(point2D_t pnt[], int n, color_t color) {
-	int i;
-	setColor(color);
-	glBegin(GL_POLYGON);
-	for (i = 0; i < n; i++) {
-		glVertex2f(pnt[i].x, pnt[i].y);
-	}glEnd();
-}
-
-// Fungsi untuk menggambar polyline (kurva terbuka)
-void drawPolyline(point2D_t pnt[], int n, color_t col1) {
-	int i;
-	//setColor(color);
-	glColor3f(col1.r, col1.g, col1.b);
-	glBegin(GL_LINE_LOOP);
 	for (i = 0; i < n; i++) {
 		glVertex2f(pnt[i].x, pnt[i].y);
 	}
 	glEnd();
 }
 
-// Fungsi untuk membuat sumbu koordinat (sb. x dan sb. y)
+void drawPolyline(Point2D_t pnt[], int n, Color_t color)
+{
+	int i;
+	setColor(color);
+	glBegin(GL_LINE_STRIP);
+	for (i = 0; i < n; i++) {
+		glVertex2f(pnt[i].x, pnt[i].y);
+	}
+	glEnd();
+}
+
+void drawDot(int x, int y) {
+	glColor3f(0.0, 0.0, 1.0);
+	glPointSize(5);
+	glBegin(GL_POINTS);
+	glVertex2i(x, y);
+	glEnd();
+}
+
 void sumbu_koordinat() {
-	point2D_t sumbux[2] = { {-200.0,0.0},{200.0,0.0} };
-	point2D_t sumbuy[2] = { {0.0,-200.0},{0.0,200.0} };
-	color_t col = { 0.0,0.0,1.0 };
-	drawLine(sumbux, 2, col);
-	drawLine(sumbuy, 2, col);
+	Point2D_t sumbuX[2] = { {-200.0, 0.0}, {200.0, 0.0} };
+	Point2D_t sumbuY[2] = { {0.0, -200.0}, {0.0, 200.0} };
+	Color_t col = { 0.0, 0.0, 1.0 };
+	drawLine(sumbuX, 2, col);
+	drawLine(sumbuY, 2, col);
 }
 
-// Fungsi untuk membuat segitiga
-void segitiga() {
-	point2D_t segitiga01[3] = { {-20.0,60.0},{20.0,60.0},{0.0,100.0} };
-	point2D_t segitiga02[3] = { {-20.0,-60.0},{20.0,-60.0},{0.0,-100.0} };
-	point2D_t segitiga03[3] = { {60.0,20.0},{60.0,-20.0},{100.0,0.0} };
-	point2D_t segitiga04[3] = { {-60.0,20.0},{-60.0,-20.0},{-100.0,0.0} };
-	color_t col = { 0.0, 1.0, 0.0 };
-	drawPolygon(segitiga01, 3, col);
-	drawPolygon(segitiga02, 3, col);
-	drawPolygon(segitiga03, 3, col);
-	drawPolygon(segitiga04, 3, col);
-	color_t col1 = { 1.0, 0.0, 0.0 };
-	point2D_t segitiga05[3] = { {40.0,40.0},{60.0,100.0},{80.0,40.0} };
-	point2D_t segitiga06[3] = { {-40.0,40.0},{-60.0,100.0},{-80.0,40.0} };
-	point2D_t segitiga07[3] = { {-40.0,-40.0},{-60.0,-100.0},{-80.0,-40.0} };
-	point2D_t segitiga08[3] = { {40.0,-40.0},{60.0,-100.0},{80.0,-40.0} };
-	drawPolyline(segitiga05, 3, col1);
-	drawPolyline(segitiga06, 3, col1);
-	drawPolyline(segitiga07, 3, col1);
-	drawPolyline(segitiga08, 3, col1);
+void circle()
+{
+	Point2D_t circle1[360];
+	Point2D_t circle2[360];
+	Point2D_t circle3[360];
+	Point2D_t circle4[360];
+	Point2D_t circle5[360];
+	Color_t col2 = { 0.0, 1.0, 0.0 };
+	Color_t col = { 1.0, 0.0, 0.0 };
+	float r = 50.0;
+	for (int i = 0; i < 360; i++) {
+		circle1[i].x = (float)(r * cos(i * 3.14 / 100));
+		circle1[i].y = (float)(r * sin(i * 3.14 / 100));
+	}
+	for (int i = 0; i < 360; i++) {
+		circle2[i].x = (float)(r * cos(i * 3.14 / 100)) + 100;
+		circle2[i].y = (float)(r * sin(i * 3.14 / 100)) + 100;
+	}
+	for (int i = 0; i < 360; i++) {
+		circle3[i].x = (float)(r * cos(i * 3.14 / 100)) - 100;
+		circle3[i].y = (float)(r * sin(i * 3.14 / 100)) - 100;
+	}
+
+	for (int i = 0; i < 360; i++) {
+		circle4[i].x = (float)(r * cos(i * 3.14 / 100)) + 100;
+		circle4[i].y = (float)(r * sin(i * 3.14 / 100)) - 100;
+	}
+
+	for (int i = 0; i < 360; i++) {
+		circle5[i].x = (float)(r * cos(i * 3.14 / 100)) - 100;
+		circle5[i].y = (float)(r * sin(i * 3.14 / 100)) + 100;
+	}
+
+	drawPolyline(circle1, 360, col);
+	drawPolyline(circle2, 360, col2);
+	drawPolyline(circle3, 360, col2);
+	drawPolyline(circle4, 360, col2);
+	drawPolyline(circle5, 360, col2);
 }
 
-// Fungsi untuk menggambar kotak
-void kotak() {
-	point2D_t kotak01[4] = { {100.0,40.0}, {100.0, 80.0}, {140.0, 80.0},
-	{140.0,40.0} };
-	point2D_t kotak02[4] = { {-100.0,40.0}, {-100.0, 80.0}, {-140.0, 80.0},
-	{-140.0,40.0} };
-	point2D_t kotak03[4] = { {-100.0,-40.0}, {-100.0, -80.0}, {-140.0, -
-	80.0}, {-140.0,-40.0} };
-	point2D_t kotak04[4] = { {100.0,-40.0}, {100.0, -80.0}, {140.0, -80.0},
-	{140.0,-40.0} };
-	color_t col = { 0.0,0.0,1.0 };
-	drawPolygon(kotak01, 4, col);
-	drawPolygon(kotak02, 4, col);
-	drawPolygon(kotak03, 4, col);
-	drawPolygon(kotak04, 4, col);
+void titik_berputar(int r)
+{
+	float teta = (float)(angle[0] / 57.3);
+	int x = (int)(r * cos(teta));
+	int y = (int)(r * sin(teta));
+	drawDot(x, y);
+	angle[0] = angle[0] + 1;
+	if (angle[0] <= -360) angle[0] = 0.0;
 }
 
-// Fungsi untuk membuat bintang
-void bintang() {
-	point2D_t bintang01[10] = { {0, 90}, {19,30}, {77,30}, {25,-5}, {47,-
-	60},{0,-30}, {-47,-60},{-25,-5}, {-77,30}, {-19,30} };
-	point2D_t bintang02[10] = { {99, 90}, {118,30}, {176,30}, {124,-5},
-	{146,-60},{99,-30}, {52,-60},{74,-5}, {22,30}, {80,30} };
-	point2D_t bintang03[10] = { {0, 204}, {19,144}, {77,144}, {25,109},
-	{47,54},{0,84}, {-47,54},{-25,109}, {-77,144}, {-19,144} };
-	point2D_t bintang04[10] = { {-99, 90}, {-118,30}, {-176,30}, {-124,-5},
-	{-146,-60},{-99,-30}, {-52,-60},{-74,-5}, {-22,30}, {-80,30} };
-	point2D_t bintang05[10] = { {0, -24}, {19,-84}, {77,-84}, {25,-119},
-	{47,-174},{0,-144}, {-47,-174},{-25,-119}, {-77,-84}, {-19,-84} };
-	color_t col = { 0.0, 0.0, 1.0 };
-	color_t col1 = { 1.0, 0.0, 0.0 };
-	drawPolyline(bintang01, 10, col1);
-	drawPolyline(bintang02, 10, col);
-	drawPolyline(bintang03, 10, col);
-	drawPolyline(bintang04, 10, col);
-	drawPolyline(bintang05, 10, col);
+void titik_berputar1(int r) // posisi kiri bawah
+{
+	float teta = (float)(angle[1] / 57.3);
+	int x = (int)(r * cos(teta) + 100);
+	int y = (int)(r * sin(teta) + 100);
+	drawDot(x, y);
+	angle[1] = angle[1] + 0.5;
+	if (angle[1] <= -360) angle[1] = 0.0;
 }
 
-// Fungsi untuk menggambar
-void userdraw(void) {
-	//sumbu_koordinat();
-	//segitiga();
-	//kotak();
-	bintang();
+void titik_berputar2(int r) // posisi kanan atas
+{
+	float teta = (float)(angle[2] / 57.3);
+	int x = (int)(r * cos(teta) - 100);
+	int y = (int)(r * sin(teta) - 100);
+	drawDot(x, y);
+	angle[2] = angle[2] - 0.3;
+	if (angle[2] <= -360) angle[2] = 0.0;
 }
 
-// Fungsi display
+void titik_berputar3(int r) // posisi kanan bawah
+{
+	float teta = (float)(angle[3] / 57.3);
+	int x = (int)(r * cos(teta) + 100);
+	int y = (int)(r * sin(teta) - 100);
+	drawDot(x, y);
+	angle[3] = angle[3] + 2;
+	if (angle[3] <= -360) angle[3] = 0.0;
+}
+
+void titik_berputar4(int r) //kiri atas
+{
+	float teta = (float)(angle[4] / 57.3);
+	int x = (int)(r * cos(teta) - 100);
+	int y = (int)(r * sin(teta) + 100);
+	drawDot(x, y);
+	angle[4] = angle[4] + 0.7;
+	if (angle[4] <= -360) angle[4] = 0.5;
+}
+
 void display(void) {
 	glClear(GL_COLOR_BUFFER_BIT);
-	userdraw();
-	glutSwapBuffers();
+	sumbu_koordinat();
+	circle();
+	titik_berputar(50);
+	titik_berputar1(50);
+	titik_berputar2(50);
+	titik_berputar3(50);
+	titik_berputar4(50);
+	glFlush();
 }
 
-// Program utama (untuk menjalankan)
+void draw0() {
+	glClear(GL_COLOR_BUFFER_BIT);
+	glFlush();
+}
+
+void Initialize()
+{
+	glClearColor(1.0, 1.0, 1.0, 0.0);
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	gluOrtho2D(-200.0, 200.0, -200.0, 200.0);
+}
+
+void timer(int)
+{
+	glutPostRedisplay();
+	glutTimerFunc(10, timer, 0);
+}
+
 int main(int argc, char** argv) {
 	glutInit(&argc, argv);
-	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
-	glutInitWindowPosition(100, 100);
-	glutInitWindowSize(640, 480);
-	glutCreateWindow("2103181060 Nova Andre Saputra");
-	glClearColor(1.0, 1.0, 1.0, 0.0);
-	gluOrtho2D(-200, 200, -200, 200);
+	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
+	glutInitWindowPosition(200, 200);
+	glutInitWindowSize(400, 400);
+	glutCreateWindow("2103181060 - Nova Andre Saputra");
+	Initialize();
 	glutDisplayFunc(display);
+	glutTimerFunc(10, timer, 0);
 	glutMainLoop();
 	return 0;
 }
