@@ -1,358 +1,323 @@
-#include <GL/glut.h>
 #include <iostream>
-#include <GL/freeglut.h>
-#include <math.h>
 using namespace std;
+#include <GL/glut.h>
+#include <math.h>
 
 // Stuct untuk menyimpan data titik, vektor dan matriks
-typedef struct
-{
+typedef struct {
 	float x;
 	float y;
-} Point2D_t;
-typedef struct
-{
-	int x;
-	int y;
-} Point2D_i;
-typedef struct
-{
-	float x, y, z;
+	float z;
 } Point3D_t;
-typedef struct
-{
-	float x, y, z, r, g, b;
-} Point3D_color_t;
-typedef struct
-{
-	float v[2];
-} Vector2D_t;
-typedef struct
-{
-	float v[3];
-} Vector3D_t;
-typedef struct
-{
-	float m[2][2];
-} Matrix2D_t;
-typedef struct
-{
+typedef struct {
 	float m[3][3];
 } Matrix3D_t;
-typedef struct
-{
-	int m[3][3];
-} Matrix3D_i;
-typedef struct
-{
+typedef struct {
+	float v[3];
+} Vector3D_t;
+typedef struct {
 	float r;
 	float g;
 	float b;
 } Color_t;
 
-// Function untuk mengubah point menjadi vektor dan sebaliknya
-void setColor(Color_t col)
-{
-	glColor3f(col.r, col.g, col.b);
-}
-Vector3D_t point2DToVector3D(Point2D_t pnt)
-{
-	Vector3D_t vector;
-	vector.v[0] = pnt.x;
-	vector.v[1] = pnt.y;
-	vector.v[2] = 1.0;
-	return vector;
-}
-Vector3D_t point3DToVector3D(Point3D_t pnt)
-{
-	Vector3D_t vector;
-	vector.v[0] = pnt.x;
-	vector.v[1] = pnt.y;
-	vector.v[2] = pnt.z;
-	return vector;
-}
-Point2D_t point3DToPoint2D(Point3D_t pnt)
-{
-	Point2D_t point;
-	point.x = pnt.x;
-	point.y = pnt.y;
-	return point;
-}
-Point2D_t vector2DToPoint2D(Vector2D_t vector)
-{
-	Point2D_t point;
-	point.x = vector.v[0];
-	point.y = vector.v[1];
-	return point;
-}
-Point2D_t vector3DToPoint2D(Vector3D_t vector)
-{
-	Point2D_t point;
-	point.x = vector.v[0];
-	point.y = vector.v[1];
-	return point;
-}
-Point3D_t vector3DToPoint3D(Vector3D_t vector)
-{
-	Point3D_t point;
-	point.x = vector.v[0];
-	point.y = vector.v[1];
-	point.z = vector.v[2];
-	return point;
-}
+// Variabel global objek
+void drawLine(Point3D_t[], int, Color_t);
+void timer(int);
+void display(void);
+void initialize(void);
+void drawPolygon(Point3D_t[], int, Color_t);
+void drawFillPolygon(Point3D_t[], int, Color_t);
+void makeCircle(Point3D_t, int, bool, Color_t);
+Matrix3D_t rotationZ(float);
+Matrix3D_t translation(int, int);
+Matrix3D_t scalingZ(float);
+Matrix3D_t createIdentity();
+Vector3D_t point2Vector3d(Point3D_t point);
+Point3D_t vector2Point3d(Vector3D_t vector);
+Vector3D_t operator*(Matrix3D_t, Vector3D_t);
+Vector3D_t operator+(Matrix3D_t, Vector3D_t);
+Matrix3D_t operator * (Matrix3D_t, Matrix3D_t);
 
-// Function untuk membuat matiks identitas (diagonal utama 1)
-Matrix3D_t createIdentityMatrix()
-{
-	Matrix3D_t matrix;
-	matrix.m[0][0] = 1.0;
-	matrix.m[0][1] = 0.0;
-	matrix.m[0][2] = 0.0;
-	matrix.m[1][0] = 0.0;
-	matrix.m[1][1] = 1.0;
-	matrix.m[1][2] = 0.0;
-	matrix.m[2][0] = 0.0;
-	matrix.m[2][1] = 0.0;
-	matrix.m[2][2] = 1.0;
-	return matrix;
-}
-
-Matrix3D_t rotationZ(float theta)
-{
-	Matrix3D_t matrix = createIdentityMatrix();
-	matrix.m[0][0] = cos(theta / 57.3);
-	matrix.m[0][1] = -sin(theta / 57.3);
-	matrix.m[1][0] = sin(theta / 57.3);
-	matrix.m[1][1] = cos(theta / 57.3);
-	return matrix;
-}
-
-Matrix3D_t flipZ(float theta)
-{
-	Matrix3D_t matrix = createIdentityMatrix();
-	matrix.m[0][0] = cos(theta / 57.3);
-	matrix.m[0][1] = 0.0;
-	matrix.m[0][2] = sin(theta / 57.3);
-	matrix.m[1][0] = 0.0;
-	matrix.m[1][1] = -1.0;
-	matrix.m[1][2] = 0.0;
-	matrix.m[2][0] = -sin(theta / 57.3);
-	matrix.m[2][1] = 0.0;
-	matrix.m[2][2] = cos(theta / 57.3);
-	return matrix;
-}
-
-Matrix3D_t scaleZ(float m)
-{
-	Matrix3D_t matrix = createIdentityMatrix();
-	matrix.m[0][0] = m;
-	matrix.m[1][1] = m;
-	return matrix;
-}
-
-Vector3D_t operator*(Matrix3D_t matrix, Vector3D_t vector)
-{
-	Vector3D_t vectorHasil;
-	for (int i = 0; i < 3; i++)
-	{
-		vectorHasil.v[i] = 0;
-		for (int j = 0; j < 3; j++)
-		{
-			vectorHasil.v[i] += matrix.m[i][j] * vector.v[j];
-		}
-	}
-	return vectorHasil;
-}
+void bola_pantul();
+void animasi_pacman();
+void drawPacman(Point3D_t center, int radius, Color_t color, bool
+	open, int right);
+Point3D_t putar_titik_pada_roda(Point3D_t, bool, int, int);
 
 // Pre Draw Function
-void drawLine(Point2D_t pnt[], int n, Color_t color)
-{
-	int i;
-	setColor(color);
-	glBegin(GL_LINES);
-	for (i = 0; i < n; i++)
-	{
-		glVertex2f(pnt[i].x, pnt[i].y);
-	}
-	glEnd();
-}
-void drawPolygon(Point3D_t pnt[], int n, Color_t color)
-{
-	int i;
-	setColor(color);
-	glBegin(GL_POLYGON);
-	for (i = 0; i < n; i++)
-	{
-		glVertex2f(pnt[i].x, pnt[i].y);
-	}
-	glEnd();
-}
-void drawPolyline(Point3D_t pnt[], int n, Color_t color)
-{
-	int i;
-	setColor(color);
+void drawPolygon(Point3D_t pnt[], int n, Color_t color) {
+	glColor3f(color.r, color.g, color.b);
 	glBegin(GL_LINE_LOOP);
-	for (i = 0; i < n; i++)
+	for (size_t i = 0; i < n; i++)
 	{
 		glVertex2f(pnt[i].x, pnt[i].y);
 	}
 	glEnd();
 }
-void drawPoint(int x, int y)
-{
-	glColor3f(0.0, 0.0, 1.0);
-	glPointSize(5);
-	glBegin(GL_POINTS);
-	glVertex2i(x, y);
+void drawFillPolygon(Point3D_t pnt[], int n, Color_t color) {
+	glColor3f(color.r, color.g, color.b);
+	glBegin(GL_POLYGON);
+	for (size_t i = 0; i < n; i++)
+	{
+		glVertex2f(pnt[i].x, pnt[i].y);
+	}
 	glEnd();
 }
-
-// Variabel global objek
-Point3D_t kotakRotasi[4] = {
-{-50.0, -50.0, 0.0}, {-50.0, 50.0, 0.0}, {50.0, 50.0, 0.0}, {50.0, -50.0,
-0.0} };
-Point3D_t kotakVertikal[4] = {
-{-200.0, -200.0, 0.0}, {-200.0, -150.0, 0.0}, {-150.0, -150.0, 0.0}, {-
-150.0, -200.0, 0.0} };
-Point3D_t kotakHorizontal[4] = {
-{100.0, 100.0, 0.0}, {100.0, 150.0, 0.0}, {150.0, 150.0, 0.0}, {150.0,
-100.0, 0.0} };
-Point3D_t kotakScale[4] = {
-{-5.0, -5.0, 0.0}, {-5.0, 5.0, 0.0}, {5.0, 5.0, 0.0}, {5.0, -5.0, 0.0} };
-
-// Function untuk menggambar sumbu koordinat
-void drawSumbuKoordinat()
-{
-	Point2D_t sumbuX[2] = { {-200.0, 0.0}, {200.0, 0.0} };
-	Point2D_t sumbuY[2] = { {0.0, -200.0}, {0.0, 200.0} };
-	Color_t col = { 0.0, 0.0, 1.0 };
-	drawLine(sumbuX, 2, col);
-	drawLine(sumbuY, 2, col);
-}
-
-void drawSegiempatRotasi()
-{
-	int n = 4;
-	Color_t col = { 1.0, 0.0, 0.0 };
-	Vector3D_t vec3D;
-	Matrix3D_t matrix3DZ = rotationZ(-2);
-	drawPolyline(kotakRotasi, n, col);
-	for (int i = 0; i < n; i++)
+void makeCircle(Point3D_t center, int radius, bool filled,
+	Color_t color) {
+	Point3D_t circle[360];
+	for (size_t i = 0; i < 360; i++)
 	{
-		vec3D = point3DToVector3D(kotakRotasi[i]);
-		vec3D = operator*(matrix3DZ, vec3D);
-		kotakRotasi[i] = vector3DToPoint3D(vec3D);
+		circle[i].x = (float)center.x + (radius * cos(i * 3.14 / 180));
+		circle[i].y = (float)center.y + (radius * sin(i * 3.14 / 180));
+	}
+	if (filled) {
+		drawFillPolygon(circle, 360, color);
+	}
+	else {
+		drawPolygon(circle, 360, color);
 	}
 }
-void drawSegiempatVertical()
-{
-	int n = 4;
-	Color_t col = { 0.0, 1.0, 0.0 };
-	drawPolygon(kotakVertikal, n, col);
-	for (int i = 0; i < n; i++)
+void drawPacman(Point3D_t center, int radius, Color_t color, bool
+	open, int right) {
+	Point3D_t circle[360];
+	Point3D_t eye = {
+	center.x,
+	center.y + 20,
+	0
+	};
+	for (size_t i = 0; i < 360; i++)
 	{
-		if (kotakVertikal[0].y >= 250)
-		{
-			kotakVertikal[0].y = -240;
-			kotakVertikal[1].y = -190;
-			kotakVertikal[2].y = -200;
-			kotakVertikal[3].y = -250;
-		}
-		else
-		{
-			kotakVertikal[i].y = kotakVertikal[i].y + 10;
-		}
+		circle[i].x = (float)center.x + (right * radius *
+			cos(i * 3.14 / 180));
+		circle[i].y = (float)center.y + (radius * sin(i * 3.14 / -180));
 	}
-}
-void drawSegiempatHorizontal()
-{
-	int n = 4;
-	Color_t col = { 0.0, 1.0, 0.0 };
-	drawPolyline(kotakHorizontal, n, col);
-	for (int i = 0; i < n; i++)
-	{
-		if (kotakHorizontal[0].x <= -250)
-		{
-			kotakHorizontal[0].x = 240;
-			kotakHorizontal[1].x = 240;
-			kotakHorizontal[2].x = 300;
-			kotakHorizontal[3].x = 300;
-		}
-		else
-		{
-			kotakHorizontal[i].x = kotakHorizontal[i].x - 10;
-		}
+	int angle = 0;
+	if (open) {
+		circle[315].x = center.x;
+		circle[315].y = center.y;
+		angle = 316;
 	}
-}
-void drawSegiempatScale()
-{
-	int n = 4;
-	Color_t col = { 0.0, 0.0, 1.0 };
-	Vector3D_t vec3D;
-	Matrix3D_t matrix3DZ = scaleZ(1.1);
-	drawPolyline(kotakScale, n, col);
-	for (int i = 0; i < n; i++)
-	{
-		if (kotakScale[0].x <= -200)
-		{
-			kotakScale[0].x = -5.0;
-			kotakScale[0].y = -5.0 * 1.1;
-			kotakScale[1].x = -5.0;
-			kotakScale[1].y = 5.0 * 1.1;
-			kotakScale[2].x = 5.0;
-			kotakScale[2].y = 5.0;
-			kotakScale[3].x = 5.0;
-			kotakScale[3].y = -5.0;
-		}
-		else
-		{
-			vec3D = point3DToVector3D(kotakScale[i]);
-			vec3D = operator*(matrix3DZ, vec3D);
-			kotakScale[i] = vector3DToPoint3D(vec3D);
-		}
+	else {
+		angle = 360;
 	}
+	makeCircle(eye, 5, true, { 0,0,1 });
+	drawPolygon(circle, angle, color);
 }
 
-void userdraw(void)
+
+// Function untuk membuat matiks identitas (diagonal utama 1)
+Matrix3D_t createIdentity() {
+	Matrix3D_t a;
+	for (size_t i = 0; i < 3; i++) {
+		for (size_t j = 0; j < 3; j++)
+			a.m[i][j] = 0;
+		a.m[i][i] = 1;
+	}
+	return a;
+}
+Matrix3D_t rotationZ(float theta) {
+	Matrix3D_t rotate = createIdentity();
+	float cs = cos(theta / 57.3);
+	float sn = sin(theta / 57.3);
+	rotate.m[0][0] = cs; rotate.m[0][1] = -sn;
+	rotate.m[1][0] = sn; rotate.m[1][1] = cs;
+	return rotate;
+}
+Matrix3D_t translation(int dx, int dy) {
+	Matrix3D_t trans = createIdentity();
+	trans.m[0][2] = dx;
+	trans.m[1][2] = dy;
+	return trans;
+}
+Matrix3D_t scalingZ(float m) {
+	Matrix3D_t u = createIdentity();
+	u.m[1][1] = m;
+	u.m[0][0] = m;
+	return u;
+}
+Vector3D_t point2Vector3d(Point3D_t point) {
+	Vector3D_t vec;
+	vec.v[0] = point.x;
+	vec.v[1] = point.y;
+	vec.v[2] = point.z;
+	return vec;
+}
+Point3D_t vector2Point3d(Vector3D_t vector) {
+	Point3D_t pnt;
+	pnt.x = vector.v[0];
+	pnt.y = vector.v[1];
+	pnt.z = vector.v[2];
+	return pnt;
+}
+Vector3D_t operator*(Matrix3D_t a, Vector3D_t b)
 {
-	// Disini tempat untuk menggambar
-	drawSumbuKoordinat();
-	drawSegiempatRotasi();
-	drawSegiempatScale();
-	drawSegiempatVertical();
-	drawSegiempatHorizontal();
+	Vector3D_t c;
+	for (int i = 0; i < 3; i++) {
+		c.v[i] = 0;
+		for (int j = 0; j < 3; j++)
+			c.v[i] += a.m[i][j] * b.v[j];
+	}
+	return c;
+}
+Vector3D_t operator + (Matrix3D_t a, Vector3D_t b) {
+	Vector3D_t c;
+	for (int i = 0; i < 3; i++) {
+		for (int j = 0; j < 3; j++) {
+			c.v[i] = a.m[i][j] + b.v[i];
+		}
+	}
+	return c;
+}
+Matrix3D_t operator * (Matrix3D_t a, Matrix3D_t b)
+{
+	Matrix3D_t c;
+	int i, j, k;
+	for (i = 0; i < 3; i++) for (j = 0; j < 3; j++) {
+		c.m[i][j] = 0;
+		for (k = 0; k < 3; k++)
+			c.m[i][j] += a.m[i][k] * b.m[k][j];
+	}
+	return c;
+}
+Point3D_t putar_titik_pada_roda(Point3D_t center, bool filled, int radius,
+	int right) {
+	static int speed = 1;
+	float theta = (float)(speed / 57.3);
+	center.x = (int)(right * radius * cos(theta)) + center.x;
+	center.y = (int)(right * radius * sin(theta)) + center.y;
+	if (filled) {
+		makeCircle(center, 10, true, { 0,1,0 });
+	}
+	speed += 1;
+	return center;
 }
 
-void display(void)
-{
-	glClear(GL_COLOR_BUFFER_BIT);
-	userdraw();
-	glFlush();
+// Function untuk menggambar object
+void bola_pantul() {
+	int speed = 2;
+	int ballCount = 2;
+	Point3D_t kotak[4] = {
+	{-200,200,0},
+	{200,200,0},
+	{200,-200,0},
+	{-200,-200}
+	};
+	static Point3D_t centerBall[2] = {
+	{-190,-160,0},
+	{190,80,0}
+	};
+	Color_t colorBall[2] = {
+	{1,0,0},
+	{0,0,1}
+	};
+	static int indexH[2] = { 1,1 };
+	static int indexV[2] = { 1,1 };
+	for (size_t i = 0; i < ballCount; i++)
+	{
+		// Untuk cek posisi horizontal
+		if (centerBall[i].x >= 190) {
+			indexH[i] = -1;
+		}
+		else if (centerBall[i].x <= -190) {
+			indexH[i] = 1;
+		}
+		// Untuk cek posisi vertikal
+		if (centerBall[i].y >= 190) {
+			indexV[i] = -1;
+		}
+		else if (centerBall[i].y <= -190) {
+			indexV[i] = 2;
+		}
+		// Translasikan
+		Matrix3D_t move = translation(indexH[i] * speed, indexV[i] * speed);
+		Vector3D_t newCenter =
+			operator+(move, point2Vector3d(centerBall[i]));
+		centerBall[i] = vector2Point3d(newCenter);
+		makeCircle(centerBall[i], 20, true, colorBall[i]);
+	}
+	drawPolygon(kotak, 4, { 0,1,0 });
 }
 
-// Pengaturan
-void Initialize()
-{
-	glClearColor(1.0, 1.0, 1.0, 0.0);
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	gluOrtho2D(-200.0, 200.0, -200.0, 200.0);
+void animasi_pacman() {
+	int speed = 1;
+	static bool open = false;
+	static int direction = 1;
+	static Point3D_t centerPacman = { -200,0,0 };
+	static Point3D_t centerRoda[2] = {
+	{-320, 150, 0},
+	{-470, 150, 0}
+	};
+	static Point3D_t batangRoda[2];
+	static Point3D_t batangRoda1[2];
+	if (centerPacman.x >= 220) {
+		direction = -1;
+	}
+	else if (centerPacman.x <= -220) {
+		direction = 1;
+	}
+	if (((int)centerPacman.x % 5) == 0) {
+		open = !open;
+	}
+	// Translasi pacman
+	Matrix3D_t move = translation(direction * speed, 0);
+	Vector3D_t newCenter =
+		operator+(move, point2Vector3d(centerPacman));
+	centerPacman = vector2Point3d(newCenter);
+	drawPacman(centerPacman, 40, { 0,0,1 }, open, direction);
+	
+	// Translasi dan rotasi roda
+	for (size_t i = 0; i < 2; i++)
+	{
+		Matrix3D_t move1 = translation(speed, 0);
+		Vector3D_t newCenter1 = operator+(move1,
+			point2Vector3d(centerRoda[i]));
+		centerRoda[i] = vector2Point3d(newCenter1);
+		makeCircle(centerRoda[i], 50, false, { 1,0,0 });
+		batangRoda[i] = putar_titik_pada_roda(centerRoda[i], true, 50, 1);
+		batangRoda1[i] = putar_titik_pada_roda(centerRoda[i], false, 50, -1);
+	}
+	if (centerRoda[1].x >= 370) {
+		centerRoda[0] = { -350, 150, 0 };
+		centerRoda[1] = { -500, 150, 0 };
+	}
+	drawLine(batangRoda, 2, { 0,1,0 });
+	drawLine(batangRoda1, 2, { 0,1,0 });
 }
-void timer(int)
-{
-	glutPostRedisplay();
-	glutTimerFunc(100, timer, 0);
-}
+
 int main(int argc, char** argv)
 {
 	glutInit(&argc, argv);
-	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
-	glutInitWindowPosition(200, 200);
-	glutInitWindowSize(400, 400);
-	glutCreateWindow("2103181060 - Nova Andre Saputra");
-	Initialize();
+	initialize();
 	glutDisplayFunc(display);
-	glutTimerFunc(100, timer, 0);
+	glutTimerFunc(1, timer, 0);
 	glutMainLoop();
 	return 0;
+}
+void display(void) {
+	glClear(GL_COLOR_BUFFER_BIT);
+	bola_pantul();
+	//animasi_pacman();
+	glutSwapBuffers();
+}
+void drawLine(Point3D_t pnt[], int n, Color_t color) {
+	glColor3f(color.r, color.g, color.b);
+	glBegin(GL_LINES);
+	for (size_t i = 0; i < n; i++)
+	{
+		glVertex2d(pnt[i].x, pnt[i].y);
+	}
+	glEnd();
+}
+void timer(int value) {
+	glutPostRedisplay();
+	glutTimerFunc(50, timer, 0);
+}
+void initialize(void) {
+	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
+	glutInitWindowSize(640, 480);
+	glutCreateWindow("2103181060 - Nova Andre Saputra");
+	glClearColor(1, 1, 1, 0);
+	gluOrtho2D(-320, 320, -240, 240);
 }
