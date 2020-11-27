@@ -1,21 +1,26 @@
 ﻿  main.cpp
-C:\Users\AndreDitVirs\source\repos\Project1\Project1\main.cpp(63,23): warning C4018: '<': signed/unsigned mismatch
-C:\Users\AndreDitVirs\source\repos\Project1\Project1\main.cpp(72,23): warning C4018: '<': signed/unsigned mismatch
-C:\Users\AndreDitVirs\source\repos\Project1\Project1\main.cpp(83,33): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-C:\Users\AndreDitVirs\source\repos\Project1\Project1\main.cpp(84,33): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-C:\Users\AndreDitVirs\source\repos\Project1\Project1\main.cpp(100,24): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\AndreDitVirs\source\repos\Project1\Project1\main.cpp(101,24): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\AndreDitVirs\source\repos\Project1\Project1\main.cpp(102,24): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\AndreDitVirs\source\repos\Project1\Project1\main.cpp(103,23): warning C4018: '<': signed/unsigned mismatch
-C:\Users\AndreDitVirs\source\repos\Project1\Project1\main.cpp(113,23): warning C4018: '<': signed/unsigned mismatch
-C:\Users\AndreDitVirs\source\repos\Project1\Project1\main.cpp(115,24): warning C4018: '<': signed/unsigned mismatch
-C:\Users\AndreDitVirs\source\repos\Project1\Project1\main.cpp(133,11): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\Users\AndreDitVirs\source\repos\Project1\Project1\main.cpp(134,11): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\Users\AndreDitVirs\source\repos\Project1\Project1\main.cpp(141,11): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\Users\AndreDitVirs\source\repos\Project1\Project1\main.cpp(142,11): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\Users\AndreDitVirs\source\repos\Project1\Project1\main.cpp(149,11): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\Users\AndreDitVirs\source\repos\Project1\Project1\main.cpp(150,11): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\Users\AndreDitVirs\source\repos\Project1\Project1\main.cpp(157,18): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-C:\Users\AndreDitVirs\source\repos\Project1\Project1\main.cpp(158,18): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-C:\Users\AndreDitVirs\source\repos\Project1\Project1\main.cpp(288,23): warning C4018: '<': signed/unsigned mismatch
+C:\Users\AndreDitVirs\source\repos\Project1\Project1\main.cpp(58,14): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\AndreDitVirs\source\repos\Project1\Project1\main.cpp(59,14): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\AndreDitVirs\source\repos\Project1\Project1\main.cpp(69,14): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\AndreDitVirs\source\repos\Project1\Project1\main.cpp(70,14): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\AndreDitVirs\source\repos\Project1\Project1\main.cpp(80,25): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\AndreDitVirs\source\repos\Project1\Project1\main.cpp(81,22): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\AndreDitVirs\source\repos\Project1\Project1\main.cpp(83,25): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\AndreDitVirs\source\repos\Project1\Project1\main.cpp(84,25): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\AndreDitVirs\source\repos\Project1\Project1\main.cpp(138,27): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\AndreDitVirs\source\repos\Project1\Project1\main.cpp(139,27): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\AndreDitVirs\source\repos\Project1\Project1\main.cpp(140,27): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\AndreDitVirs\source\repos\Project1\Project1\main.cpp(141,26): warning C4018: '<': signed/unsigned mismatch
+C:\Users\AndreDitVirs\source\repos\Project1\Project1\main.cpp(151,26): warning C4018: '<': signed/unsigned mismatch
+C:\Users\AndreDitVirs\source\repos\Project1\Project1\main.cpp(153,30): warning C4018: '<': signed/unsigned mismatch
+C:\Users\AndreDitVirs\source\repos\Project1\Project1\main.cpp(168,32): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\AndreDitVirs\source\repos\Project1\Project1\main.cpp(169,32): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\AndreDitVirs\source\repos\Project1\Project1\main.cpp(174,32): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\AndreDitVirs\source\repos\Project1\Project1\main.cpp(175,32): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\AndreDitVirs\source\repos\Project1\Project1\main.cpp(176,23): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+C:\Users\AndreDitVirs\source\repos\Project1\Project1\main.cpp(207,32): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\AndreDitVirs\source\repos\Project1\Project1\main.cpp(208,32): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\AndreDitVirs\source\repos\Project1\Project1\main.cpp(210,33): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\AndreDitVirs\source\repos\Project1\Project1\main.cpp(211,33): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\AndreDitVirs\source\repos\Project1\Project1\main.cpp(212,24): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
   Project1.vcxproj -> C:\Users\AndreDitVirs\source\repos\Project1\Debug\opengl.exe
